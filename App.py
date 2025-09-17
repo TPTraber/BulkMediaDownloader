@@ -6,24 +6,6 @@ from tkinter import filedialog
 def updateLabel(label, text):
     label._text = text
 
-def BulkPanoDownload(CSVPath, outputPath, bar):
-    with open(CSVPath, 'r', newline='') as file:
-        csv_reader = csv.reader(file)
-        for row in csv_reader:
-            if row[0] == "":
-                count += 1
-            else:
-                name = row[0]
-                count = 0
-            url = row[1]
-
-            if url.__contains__("maps"):
-                id = url.split("!1s")[1].split("!2e")[0]
-                print(f"Downloading {id} to {name}_{count}.jpg")
-                pano = streetview.find_panorama_by_id(id)
-                streetview.download_panorama(pano, f"{outputPath}/{name}_{count}.jpg")
-
-
 class FileUploadFrame(CTkin.CTkFrame):
     def __init__(self, master, title, type):
         super().__init__(master)
@@ -42,6 +24,7 @@ class FileUploadFrame(CTkin.CTkFrame):
             else:
                 self.path = filedialog.askdirectory()
             pathLabel.configure(text="Selected: " + self.path)
+            
             print('Selected:', self.path)
 
         button = CTkin.CTkButton(self, text="Choose File", command=ChoosePath)
@@ -66,17 +49,42 @@ CSVFrame = FileUploadFrame(app, "Step 1: Choose CSV", "file")
 outputFrame = FileUploadFrame(app, "Step 2: Choose Output Folder", "Folder")
 #outputFrame.grid(row=2, column=0)
 
-downloadBttn = CTkin.CTkButton(app, text="Download")
+bar = CTkin.CTkProgressBar(app, mode="determinate")
+
+def BulkPanoDownload():
+    with open(CSVFrame.path, 'r', newline='') as file:
+        csv_reader = csv.reader(file)
+        
+        for row in csv_reader:
+            if row[0] == "":
+                count += 1
+            else:
+                name = row[0]
+                count = 0
+            url = row[1]
+
+            if url.__contains__("maps"):
+                id = url.split("!1s")[1].split("!2e")[0]
+                print(f"Downloading {id} to {name}_{count}.jpg")
+                pano = streetview.find_panorama_by_id(id)
+                streetview.download_panorama(pano, f"{outputFrame.path}/{name}_{count}.jpg")
+            bar.step()
+
+downloadBttn = CTkin.CTkButton(app, text="Download", command=BulkPanoDownload)
 #downloadBttn.grid(row=3,column=0)
 
 CSVFrame.pack(padx=10,pady=5)
 outputFrame.pack(padx=10,pady=5)
 downloadBttn.pack(padx=10,pady=5)
 
-bar = CTkin.CTkProgressBar(app, mode="determinate")
+
+bar.stop()
+
 #bar.grid(row=4, column=0)
 
 bar.pack()
 
 app.mainloop()
+
+
 
