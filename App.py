@@ -1,8 +1,5 @@
 import customtkinter as CTkin
-from streetlevel import streetview
-import csv
 from tkinter import filedialog
-import urllib.request
 from BulkMediaDownload import BulkMediaDownloader as BMD
 
 def updateLabel(label, text):
