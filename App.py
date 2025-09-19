@@ -2,6 +2,8 @@ import customtkinter as CTkin
 from streetlevel import streetview
 import csv
 from tkinter import filedialog
+import urllib.request
+from BulkMediaDownload import BulkMediaDownloader as BMD
 
 def updateLabel(label, text):
     label._text = text
@@ -51,26 +53,12 @@ outputFrame = FileUploadFrame(app, "Step 2: Choose Output Folder", "Folder")
 
 bar = CTkin.CTkProgressBar(app, mode="determinate")
 
-def BulkPanoDownload():
-    with open(CSVFrame.path, 'r', newline='') as file:
-        csv_reader = csv.reader(file)
-        
-        for row in csv_reader:
-            if row[0] == "":
-                count += 1
-            else:
-                name = row[0]
-                count = 0
-            url = row[1]
+def requestBulkDownload():
+    errors = BMD.BulkMediaDownload(outputFrame.path, CSVPath=CSVFrame.path)
+    print(errors)
 
-            if url.__contains__("maps"):
-                id = url.split("!1s")[1].split("!2e")[0]
-                print(f"Downloading {id} to {name}_{count}.jpg")
-                pano = streetview.find_panorama_by_id(id)
-                streetview.download_panorama(pano, f"{outputFrame.path}/{name}_{count}.jpg")
-            bar.step()
 
-downloadBttn = CTkin.CTkButton(app, text="Download", command=BulkPanoDownload)
+downloadBttn = CTkin.CTkButton(app, text="Download", command=requestBulkDownload)
 #downloadBttn.grid(row=3,column=0)
 
 CSVFrame.pack(padx=10,pady=5)
