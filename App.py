@@ -37,6 +37,8 @@ class FileUploadFrame(CTkin.CTkFrame):
 
 app = CTkin.CTk()
 
+app.minsize(width=800, height=400)
+
 app.title("BulkMediaDownloader")
 
 title = CTkin.CTkLabel(app, text="BulkMediaDownloader", font=CTkin.CTkFont(size=10))
