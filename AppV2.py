@@ -11,13 +11,11 @@ class FileSelectButton(ttk.Button):
         def ChoosePath(event=None):
             if type == "file":
                 pathVar.set(filedialog.askopenfilename())
-                #master.path = filedialog.askopenfilename()
             else:
                 pathVar.set(filedialog.askdirectory())
-                #master.path = filedialog.askdirectory()
-            
             
             print('Selected:',pathVar.get())
+
         super().__init__(master, command=ChoosePath, text=text)
     
 class CSVFileUploadFrame(ttk.Frame): 
@@ -37,6 +35,9 @@ class CSVFileUploadFrame(ttk.Frame):
         chooseButton  = FileSelectButton(upperFrame, self.path, "file", text="Choose File")
         subtitle.grid(column=0, row=0)
         chooseButton.grid(column=1, row=0)
+    
+    def getPath(self):
+        return self.path
 
 class FolderUploadFrame(ttk.Frame): 
     def __init__(self, master):
@@ -53,18 +54,13 @@ class FolderUploadFrame(ttk.Frame):
         textBox = ttk.Entry(lowerFrame, textvariable= self.path)
         textBox.grid(column=0, row=0)
 
-        
-
         subtitle = ttk.Label(upperFrame, text="Select Ouput Folder:")
         chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
         subtitle.grid(column=0, row=0)
         chooseButton.grid(column=1, row=0)
 
-        
-        
-
-
-        
+    def getPath(self):
+        return self.path
 
 
 app = Tkn.Tk()
@@ -94,7 +90,7 @@ CSVFrame.grid_columnconfigure(0, weight=1)
 FolderFrame.grid_columnconfigure(0, weight=1)
 
 def requestBulkDownload():
-    errors = BMD.BulkMediaDownload(FolderUploadFrame.path, CSVPath=CSVFrame.path)
+    errors = BMD.BulkMediaDownload(FolderFrame.getPath(), CSVPath=CSVFrame.getPath())
     print(errors)
 
 
