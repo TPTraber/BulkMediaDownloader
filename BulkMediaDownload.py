@@ -31,6 +31,7 @@ class BulkMediaDownloader():
         except requests.exceptions.RequestException as e:
             print(f"Request Error: {e}")
 
+    @staticmethod
     def __URLHandler(url, outputPath, name, count=0):
         if url.__contains__("maps"):
             BulkMediaDownloader.PanoDownload(url, outputPath + f"/{name}_{count}")
@@ -78,7 +79,7 @@ class BulkMediaDownloader():
                         print(f"An unexpected error occurred: {e}")
                         errors.append(outputPath + f"/{name}_{name_count}")
         elif urlList != None:
-                count = 0 
+                count = 0
                 for url in urlList:
                     try:
                         if url.__contains__("maps"):

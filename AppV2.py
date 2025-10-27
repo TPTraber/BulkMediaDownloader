@@ -37,7 +37,7 @@ class CSVFileUploadFrame(ttk.Frame):
         chooseButton.grid(column=1, row=0)
     
     def getPath(self):
-        return self.path
+        return self.path.get()
 
 class FolderUploadFrame(ttk.Frame): 
     def __init__(self, master):
@@ -60,7 +60,7 @@ class FolderUploadFrame(ttk.Frame):
         chooseButton.grid(column=1, row=0)
 
     def getPath(self):
-        return self.path
+        return self.path.get()
 
 
 app = Tkn.Tk()
@@ -70,7 +70,6 @@ app.minsize(width=400, height=600)
 app.title("BulkMediaDownloader")
 
 title = Tkn.Label(app, text="BulkMediaDownloader")
-#TODO Add Font change here
 title.grid(row=0,column=0)
 
 bulkDownloadFrame = ttk.Frame(app)
