@@ -18,9 +18,10 @@ class FileSelectButton(ttk.Button):
 
         super().__init__(master, command=ChoosePath, text=text)
     
-class CSVFileUploadFrame(ttk.Frame): 
-    def __init__(self, master):
+class UploadFrame(ttk.Frame): 
+    def __init__(self, master, type):
         super().__init__(master)
+
         self.path = Tkn.StringVar()
 
         upperFrame = ttk.Frame(self)
@@ -31,58 +32,50 @@ class CSVFileUploadFrame(ttk.Frame):
         textBox = ttk.Entry(lowerFrame, textvariable= self.path)
         textBox.grid(column=0, row=0)
 
-        subtitle = ttk.Label(upperFrame, text="Select CSV:")
-        chooseButton  = FileSelectButton(upperFrame, self.path, "file", text="Choose File")
-        subtitle.grid(column=0, row=0)
+        if(type.lower() == "csv"):
+            subtitle = ttk.Label(upperFrame, text="Select CSV:")
+            chooseButton  = FileSelectButton(upperFrame, self.path, "file", text="Choose File")
+        elif (type.lower() == "folder"):
+            subtitle = ttk.Label(upperFrame, text="Select Ouput Folder:")
+            chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
+        else:
+            subtitle = ttk.Label(upperFrame, text="Select File:")
+            chooseButton  = FileSelectButton(upperFrame, self.path, "file", text="Choose File")
+            
+        subtitle.grid(column=0, row=0, sticky="w")
         chooseButton.grid(column=1, row=0)
-    
+        
     def getPath(self):
         return self.path.get()
+root = Tkn.Tk()
 
-class FolderUploadFrame(ttk.Frame): 
-    def __init__(self, master):
-        super().__init__(master)
-        self.path = Tkn.StringVar()
+root.minsize(width=400, height=600)
 
-        upperFrame = ttk.Frame(self)
-        lowerFrame = ttk.Frame(self)
-        upperFrame.grid(column=0, row=0)
-        lowerFrame.grid_columnconfigure(0, weight=1)
-        lowerFrame.grid(column=0, row=1)
-        lowerFrame.grid_columnconfigure(0, weight=1)
+root.title("BulkMediaDownloader")
 
-        textBox = ttk.Entry(lowerFrame, textvariable= self.path)
-        textBox.grid(column=0, row=0)
+app = ttk.Frame(root)
+app.pack(fill="both", expand=True)
 
-        subtitle = ttk.Label(upperFrame, text="Select Ouput Folder:")
-        chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
-        subtitle.grid(column=0, row=0)
-        chooseButton.grid(column=1, row=0)
+# Set the initial theme
+root.tk.call("source", "azure.tcl")
+root.tk.call("set_theme", "light")
 
-    def getPath(self):
-        return self.path.get()
-
-
-app = Tkn.Tk()
-
-app.minsize(width=400, height=600)
-
-app.title("BulkMediaDownloader")
-
-title = Tkn.Label(app, text="BulkMediaDownloader")
+title = ttk.Label(app, text="BulkMediaDownloader")
 title.grid(row=0,column=0)
 
 bulkDownloadFrame = ttk.Frame(app)
 bulkDownloadFrame.grid(column=0, row=1)
 
-CSVFrame = CSVFileUploadFrame(bulkDownloadFrame)
+CSVFrame = UploadFrame(bulkDownloadFrame, "CSV")
 CSVFrame.grid(column=0, row=1)
 
-FolderFrame = FolderUploadFrame(bulkDownloadFrame)
+FolderFrame = UploadFrame(bulkDownloadFrame, "folder")
 FolderFrame.grid(column=0, row=2)
 
 # Configure the root window's row and column to expand
-app.grid_columnconfigure(0, weight=1)
+app.grid_columnconfigure(0, weight=1,pad=20)
+for index in [0,1,2]:
+    app.grid_rowconfigure(index, pad=20)
 
 # Configure the frame's row and column to expand
 CSVFrame.grid_columnconfigure(0, weight=1)
@@ -93,7 +86,7 @@ def requestBulkDownload():
     print(errors)
 
 
-downloadBttn = Tkn.Button(app, text="Download", command=requestBulkDownload)
+downloadBttn = ttk.Button(app, text="Download", command=requestBulkDownload)
 downloadBttn.grid(row=3,column=0)
 
 app.mainloop()
