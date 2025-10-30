@@ -3,6 +3,10 @@ from tkinter import ttk
 from tkinter import filedialog
 from BulkMediaDownload import BulkMediaDownloader as BMD
 
+import sv_ttk
+import darkdetect
+
+
 def updateLabel(label, text):
     label._text = text
 
@@ -24,13 +28,16 @@ class UploadFrame(ttk.Frame):
 
         self.path = Tkn.StringVar()
 
-        upperFrame = ttk.Frame(self)
-        lowerFrame = ttk.Frame(self)
-        upperFrame.grid(column=0, row=0)
-        lowerFrame.grid(column=0, row=1)
+        self.grid_rowconfigure(0, weight = 1, pad=20)
+
+        upperFrame = ttk.Frame(self, style='Frame1.TFrame')
+        lowerFrame = ttk.Frame(self, style='Frame1.TFrame')
+        upperFrame.grid(column=0, row=0, sticky="we")
+        lowerFrame.grid(column=0, row=1, sticky="we")
 
         textBox = ttk.Entry(lowerFrame, textvariable= self.path)
-        textBox.grid(column=0, row=0)
+        textBox.grid(column=0, row=0, sticky="we")
+        lowerFrame.grid_columnconfigure(0, weight=1)
 
         if(type.lower() == "csv"):
             subtitle = ttk.Label(upperFrame, text="Select CSV:")
@@ -53,31 +60,37 @@ root.minsize(width=400, height=600)
 
 root.title("BulkMediaDownloader")
 
+root.grid_rowconfigure(0, weight=1)
+root.grid_columnconfigure(0, weight=1)
+
 app = ttk.Frame(root)
-app.pack(fill="both", expand=True)
+app.grid(row=0,column=0, sticky="nsew")
 
 # Set the initial theme
-root.tk.call("source", "azure.tcl")
-root.tk.call("set_theme", "light")
 
-title = ttk.Label(app, text="BulkMediaDownloader")
-title.grid(row=0,column=0)
+sv_ttk.set_theme(darkdetect.theme())
 
-bulkDownloadFrame = ttk.Frame(app)
-bulkDownloadFrame.grid(column=0, row=1)
+# root.tk.call("source", "azure.tcl")
+# root.tk.call("set_theme", "light")
+
+title = ttk.Label(app, text="BulkMediaDownloader", font=("Arial", 16, "bold"))
+title.grid(row=0,column=0, sticky="we", padx=20)
+app.grid_columnconfigure(0, weight=1)
+
+
+bulkDownloadFrame = ttk.Frame(app, borderwidth=1, relief="solid")
+bulkDownloadFrame.grid(column=0, row=1, sticky="we", padx=20,pady=10)
+
 
 CSVFrame = UploadFrame(bulkDownloadFrame, "CSV")
-CSVFrame.grid(column=0, row=1)
+CSVFrame.grid(column=0, row=1, sticky="we",padx=10)
 
 FolderFrame = UploadFrame(bulkDownloadFrame, "folder")
-FolderFrame.grid(column=0, row=2)
+FolderFrame.grid(column=0, row=2, sticky="we", pady=20,padx=10)
 
-# Configure the root window's row and column to expand
-app.grid_columnconfigure(0, weight=1,pad=20)
-for index in [0,1,2]:
-    app.grid_rowconfigure(index, pad=20)
+bulkDownloadFrame.grid_columnconfigure(0, weight=1,)
 
-# Configure the frame's row and column to expand
+
 CSVFrame.grid_columnconfigure(0, weight=1)
 FolderFrame.grid_columnconfigure(0, weight=1)
 
