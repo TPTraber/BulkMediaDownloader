@@ -74,7 +74,7 @@ sv_ttk.set_theme(darkdetect.theme())
 # root.tk.call("set_theme", "light")
 
 title = ttk.Label(app, text="BulkMediaDownloader", font=("Arial", 16, "bold"))
-title.grid(row=0,column=0, sticky="we", padx=20)
+title.grid(row=0,column=0, sticky="we", padx=20,pady=10)
 app.grid_columnconfigure(0, weight=1)
 
 
@@ -94,12 +94,19 @@ bulkDownloadFrame.grid_columnconfigure(0, weight=1,)
 CSVFrame.grid_columnconfigure(0, weight=1)
 FolderFrame.grid_columnconfigure(0, weight=1)
 
-def requestBulkDownload():
-    errors = BMD.BulkMediaDownload(FolderFrame.getPath(), CSVPath=CSVFrame.getPath())
-    print(errors)
+progressBar = ttk.Progressbar(app, value=0, maximum=100, mode='determinate', length=150)
+progressBar.grid(row=4, column=0, pady=20, sticky="n")
 
+progressLabel = ttk.Label(app, text="")
+progressLabel.grid(row=5, column=0)
+
+def requestBulkDownload():
+    errors = BMD.BulkMediaDownload(FolderFrame.getPath(), CSVPath=CSVFrame.getPath(), ProgressLabel=progressLabel, ProgressBar=progressBar)
+    print(errors)
 
 downloadBttn = ttk.Button(app, text="Download", command=requestBulkDownload)
 downloadBttn.grid(row=3,column=0)
+
+
 
 app.mainloop()

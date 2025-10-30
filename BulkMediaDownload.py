@@ -54,15 +54,21 @@ class BulkMediaDownloader():
 
 
     @staticmethod
-    def BulkMediaDownload(outputPath, CSVPath=None, urlList=None):
+    def BulkMediaDownload(outputPath, CSVPath=None, urlList=None, ProgressLabel=None, ProgressBar=None):
 
         if CSVPath == None and urlList == None:
             raise Exception("No url input")
 
         if CSVPath != None:
             with open(CSVPath, 'r', newline='') as file:
+                csv_num = csv.reader(file)
+                if (ProgressBar != None): ProgressBar.config(maximum=len(list(csv_num)))
+
+            with open(CSVPath, 'r', newline='') as file:
                 csv_reader = csv.reader(file)
                 errors = []
+
+                val = 0
                 
                 for row in csv_reader:
                     if row[0] == "":
@@ -71,13 +77,18 @@ class BulkMediaDownloader():
                         name = row[0]
                         name_count = 0
                     url = row[1]
+
                     try:
+                       if (ProgressLabel != None): ProgressLabel.config(text=f"Downloading: {name}_{name_count}")
                        BulkMediaDownloader.__URLHandler(url, outputPath, name, count=name_count)
 
                     except Exception as e:
                         # A general exception handler for any other unexpected errors
                         print(f"An unexpected error occurred: {e}")
                         errors.append(outputPath + f"/{name}_{name_count}")
+                    val += 1
+                    if (ProgressBar != None): ProgressBar.config(value=val)
+                    
         elif urlList != None:
                 count = 0
                 for url in urlList:
