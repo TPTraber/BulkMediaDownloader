@@ -1,16 +1,17 @@
-import customtkinter as CTkin
+import tkinter as Tkn
+from tkinter import ttk
 from tkinter import filedialog
 from BulkMediaDownload import BulkMediaDownloader as BMD
 
 def updateLabel(label, text):
     label._text = text
 
-class FileUploadFrame(CTkin.CTkFrame):
+class FileUploadFrame(Tkn.Frame):
     def __init__(self, master, title, type):
         super().__init__(master)
         self.grid_columnconfigure(0, weight=1)
         self.title = title
-        self.title = CTkin.CTkLabel(self, text=self.title, fg_color="gray30", corner_radius=6)
+        self.title = Tkn.Label(self, text=self.title)
         self.title.pack()
         self.type = type
         #self.title.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="ew")
@@ -26,22 +27,23 @@ class FileUploadFrame(CTkin.CTkFrame):
             
             print('Selected:', self.path)
 
-        button = CTkin.CTkButton(self, text="Choose File", command=ChoosePath)
+        button = Tkn.Button(self, text="Choose File", command=ChoosePath)
         #button.grid(row=0, column=1, padx=20, pady=20)
         button.pack()
 
-        pathLabel = CTkin.CTkLabel(self, text="Selected: ")
+        pathLabel = Tkn.Label(self, text="Selected: ")
         pathLabel.pack()
         
 
 
-app = CTkin.CTk()
+app = Tkn.Tk()
 
 app.minsize(width=800, height=400)
 
 app.title("BulkMediaDownloader")
 
-title = CTkin.CTkLabel(app, text="BulkMediaDownloader", font=CTkin.CTkFont(size=10))
+title = Tkn.Label(app, text="BulkMediaDownloader")
+#TODO Add Font change here
 #title.grid(row=0,column=0)
 
 CSVFrame = FileUploadFrame(app, "Step 1: Choose CSV", "file")
@@ -50,14 +52,14 @@ CSVFrame = FileUploadFrame(app, "Step 1: Choose CSV", "file")
 outputFrame = FileUploadFrame(app, "Step 2: Choose Output Folder", "Folder")
 #outputFrame.grid(row=2, column=0)
 
-bar = CTkin.CTkProgressBar(app, mode="determinate")
+bar = ttk.Progressbar(app, mode="determinate")
 
 def requestBulkDownload():
     errors = BMD.BulkMediaDownload(outputFrame.path, CSVPath=CSVFrame.path)
     print(errors)
 
 
-downloadBttn = CTkin.CTkButton(app, text="Download", command=requestBulkDownload)
+downloadBttn = Tkn.Button(app, text="Download", command=requestBulkDownload)
 #downloadBttn.grid(row=3,column=0)
 
 CSVFrame.pack(padx=10,pady=5)
@@ -72,6 +74,3 @@ bar.stop()
 bar.pack()
 
 app.mainloop()
-
-
-

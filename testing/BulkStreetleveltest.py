@@ -21,6 +21,3 @@ with open('data.csv', 'r', newline='') as file:
             print(f"Downloading {id} to {name}_{count}.jpg")
             pano = streetview.find_panorama_by_id(id)
             streetview.download_panorama(pano, f"{name}_{count}.jpg")
-
-
-
