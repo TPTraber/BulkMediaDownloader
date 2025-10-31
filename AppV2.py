@@ -1,4 +1,5 @@
-import tkinter as Tkn
+import tkinter as tk
+from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 from BulkMediaDownload import BulkMediaDownloader as BMD
@@ -21,17 +22,57 @@ class FileSelectButton(ttk.Button):
             print('Selected:',pathVar.get())
 
         super().__init__(master, command=ChoosePath, text=text)
+
+def completePopup():
+
+    #Test Errors
+    #errors = ["test1", "blahblah", "really really bad error"]
+    #for i in range(0,20):
+            #errors.append(i)
+
+    win = tk.Toplevel()
+    win.title("Download Complete")
+    win.grid_columnconfigure(0, weight=1)
+
+    title = ttk.Label(win, text="Download Complete!", font=("Arial", 14, "bold"))
+    title.grid(row=0, column=0,padx=20,pady=10)
+
+    label = ttk.Label(win, text="Completed with " + str(len(errors)) + " errors:")
+    label.grid(row=1,column=0, pady=10)
+
+    curRow = 2
+    if(len(errors) != 0):
+        frame = ttk.Frame(win, borderwidth=1, relief="solid")
+
+        eList = tk.Listbox(frame, height=5)
+        s = ttk.Scrollbar(frame, orient=VERTICAL, command=eList.yview)
+        s.grid(row=0,column=1, sticky="ns")
+        eList['yscrollcommand'] = s.set
+        for error in errors:
+            eList.insert('end', error)
+        eList.grid(row=0, column=0, sticky="nsew")
+
+        frame.grid(row=curRow, column=0, pady=5, padx=20, sticky="nsew")
+        frame.grid_columnconfigure(0, weight=1)
+        frame.grid_rowconfigure(0, weight=1)
+
+        win.grid_rowconfigure(curRow, weight=1)
+        curRow += 1
+
+    closeButton = ttk.Button(win, text="Great!", command=win.destroy)
+    closeButton.grid(row = curRow, column=0, pady=20,padx=20)
+
     
 class UploadFrame(ttk.Frame): 
     def __init__(self, master, type):
         super().__init__(master)
 
-        self.path = Tkn.StringVar()
+        self.path = tk.StringVar()
 
         self.grid_rowconfigure(0, weight = 1, pad=20)
 
-        upperFrame = ttk.Frame(self, style='Frame1.TFrame')
-        lowerFrame = ttk.Frame(self, style='Frame1.TFrame')
+        upperFrame = ttk.Frame(self)
+        lowerFrame = ttk.Frame(self)
         upperFrame.grid(column=0, row=0, sticky="we")
         lowerFrame.grid(column=0, row=1, sticky="we")
 
@@ -50,11 +91,11 @@ class UploadFrame(ttk.Frame):
             chooseButton  = FileSelectButton(upperFrame, self.path, "file", text="Choose File")
             
         subtitle.grid(column=0, row=0, sticky="w")
-        chooseButton.grid(column=1, row=0)
+        chooseButton.grid(column=1, row=0, padx=(5,0))
         
     def getPath(self):
         return self.path.get()
-root = Tkn.Tk()
+root = tk.Tk()
 
 root.minsize(width=400, height=600)
 
@@ -70,9 +111,6 @@ app.grid(row=0,column=0, sticky="nsew")
 
 sv_ttk.set_theme(darkdetect.theme())
 
-# root.tk.call("source", "azure.tcl")
-# root.tk.call("set_theme", "light")
-
 title = ttk.Label(app, text="BulkMediaDownloader", font=("Arial", 16, "bold"))
 title.grid(row=0,column=0, sticky="we", padx=20,pady=10)
 app.grid_columnconfigure(0, weight=1)
@@ -83,7 +121,7 @@ bulkDownloadFrame.grid(column=0, row=1, sticky="we", padx=20,pady=10)
 
 
 CSVFrame = UploadFrame(bulkDownloadFrame, "CSV")
-CSVFrame.grid(column=0, row=1, sticky="we",padx=10)
+CSVFrame.grid(column=0, row=1, sticky="we",padx=10, pady=5)
 
 FolderFrame = UploadFrame(bulkDownloadFrame, "folder")
 FolderFrame.grid(column=0, row=2, sticky="we", pady=20,padx=10)
@@ -100,13 +138,17 @@ progressBar.grid(row=4, column=0, pady=20, sticky="n")
 progressLabel = ttk.Label(app, text="")
 progressLabel.grid(row=5, column=0)
 
+errors = list()
+
 def requestBulkDownload():
-    errors = BMD.BulkMediaDownload(FolderFrame.getPath(), CSVPath=CSVFrame.getPath(), ProgressLabel=progressLabel, ProgressBar=progressBar)
+    errors = BMD.BulkMediaDownload(FolderFrame.getPath(), CSVPath=CSVFrame.getPath(), ProgressLabel=progressLabel, ProgressBar=progressBar, Root=root, WaitTime=0.1)
     print(errors)
+    completePopup()
 
 downloadBttn = ttk.Button(app, text="Download", command=requestBulkDownload)
 downloadBttn.grid(row=3,column=0)
 
-
+#testBttn = ttk.Button(app, text="test popup", command=completePopup)
+#testBttn.grid(row=5, column=0)
 
 app.mainloop()

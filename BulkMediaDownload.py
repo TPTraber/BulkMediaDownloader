@@ -1,6 +1,7 @@
 from streetlevel import streetview
 import csv
 import requests
+import time
 
 
 class BulkMediaDownloader(): 
@@ -37,6 +38,8 @@ class BulkMediaDownloader():
             BulkMediaDownloader.PanoDownload(url, outputPath + f"/{name}_{count}")
         elif url.__contains__(".jpg") or url.__contains__(".png"):
             BulkMediaDownloader.DownloadImage(url, outputPath + f"/{name}_{count}")
+        else:
+            raise Exception("Unknown URL Type")
 
     
     @staticmethod
@@ -54,7 +57,7 @@ class BulkMediaDownloader():
 
 
     @staticmethod
-    def BulkMediaDownload(outputPath, CSVPath=None, urlList=None, ProgressLabel=None, ProgressBar=None):
+    def BulkMediaDownload(outputPath:str, CSVPath:str=None, urlList:list=None , ProgressLabel=None, ProgressBar=None, Root=None, WaitTime:float=None):
 
         if CSVPath == None and urlList == None:
             raise Exception("No url input")
@@ -87,8 +90,11 @@ class BulkMediaDownloader():
                         print(f"An unexpected error occurred: {e}")
                         errors.append(outputPath + f"/{name}_{name_count}")
                     val += 1
+
+                    #If tkinter elements present, update them
                     if (ProgressBar != None): ProgressBar.config(value=val)
-                    
+                    if(Root != None): Root.update_idletasks()
+                    if (WaitTime != None): time.sleep(WaitTime)
         elif urlList != None:
                 count = 0
                 for url in urlList:
@@ -103,8 +109,12 @@ class BulkMediaDownloader():
                         print(f"An unexpected error occurred: {e}")
                         errors.append(outputPath + f"/{name}_{count}")
                     count += 1
-        
-        ## TODO - Add some sort of visual feedback for downloading images
+                    val += 1
+
+                    #If tkinter elements present, update them
+                    if (ProgressBar != None): ProgressBar.config(value=val)
+                    if(Root != None): Root.update_idletasks()
+                    if (WaitTime != None): time.sleep(WaitTime)
 
         return errors
         
