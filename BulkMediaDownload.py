@@ -88,7 +88,7 @@ class BulkMediaDownloader():
                     except Exception as e:
                         # A general exception handler for any other unexpected errors
                         print(f"An unexpected error occurred: {e}")
-                        errors.append(outputPath + f"/{name}_{name_count}")
+                        errors.append(f"{name}_{name_count}")
                     val += 1
 
                     #If tkinter elements present, update them
@@ -107,7 +107,7 @@ class BulkMediaDownloader():
                     except Exception as e:
                         # A general exception handler for any other unexpected errors
                         print(f"An unexpected error occurred: {e}")
-                        errors.append(outputPath + f"/{name}_{count}")
+                        errors.append(f"{name}_{count}")
                     count += 1
                     val += 1
 

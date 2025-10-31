@@ -23,7 +23,7 @@ class FileSelectButton(ttk.Button):
 
         super().__init__(master, command=ChoosePath, text=text)
 
-def completePopup():
+def completePopup(errors):
 
     #Test Errors
     #errors = ["test1", "blahblah", "really really bad error"]
@@ -138,12 +138,10 @@ progressBar.grid(row=4, column=0, pady=20, sticky="n")
 progressLabel = ttk.Label(app, text="")
 progressLabel.grid(row=5, column=0)
 
-errors = list()
-
 def requestBulkDownload():
     errors = BMD.BulkMediaDownload(FolderFrame.getPath(), CSVPath=CSVFrame.getPath(), ProgressLabel=progressLabel, ProgressBar=progressBar, Root=root, WaitTime=0.1)
     print(errors)
-    completePopup()
+    completePopup(errors)
 
 downloadBttn = ttk.Button(app, text="Download", command=requestBulkDownload)
 downloadBttn.grid(row=3,column=0)
