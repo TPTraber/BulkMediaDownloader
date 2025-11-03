@@ -6,3 +6,4 @@ App.spec
 figmaPAT.txt
 /figma
 .spec
+*.spec
