@@ -6,12 +6,12 @@ Currently Not working ;(
 from streetlevel import streetview
 import time
 
-url = "https://www.google.com/maps/@37.2814091,-76.6936657,3a,75y,293.49h,80.75t/data=!3m7!1e1!3m5!1suCgqBD6-AJ22Su1tpad7wA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D9.254850486564123%26panoid%3DuCgqBD6-AJ22Su1tpad7wA%26yaw%3D293.4900554585608!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTExMC4wIKXMDSoASAFQAw%3D%3D"
+url = "https://www.google.com/maps/place/Sweden/@62.2858159,14.7975707,3a,67.6y,139.68h,89.03t/data=!3m7!1e1!3m5!1s5lFl20_SnzxEHsXNblbI0g!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0.9656099192983163%26panoid%3D5lFl20_SnzxEHsXNblbI0g%26yaw%3D139.68083837114295!7i16384!8i8192!4m6!3m5!1s0x465cb2396d35f0f1:0x22b8eba28dad6f62!8m2!3d60.128161!4d18.643501!16zL20vMGQwdnFu?entry=ttu&g_ep=EgoyMDI1MTExMi4wIKXMDSoASAFQAw%3D%3D"
 
 id = url.split("!1s")[1].split("!2e")[0]
 pano = streetview.find_panorama_by_id(id)
 
-path = "C:/Users/VRLAB/Desktop/test"
+path = "C:/Users/VRLAB/Desktop/testingg"
 
 streetview.download_panorama(pano, f"{path}/test.jpg")
 
