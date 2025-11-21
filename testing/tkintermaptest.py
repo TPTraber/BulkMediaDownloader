@@ -10,7 +10,6 @@ root_tk.title("map_view_example.py")
 map_widget = tkintermapview.TkinterMapView(root_tk, width=800, height=600, corner_radius=0)
 map_widget.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 map_widget.set_tile_server("https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22)  # google normal
-
 address = tkintermapview.convert_address_to_coordinates("Williamsburg")
 map_widget.set_position(address[0],address[1])
 map_widget.set_zoom(15)
