@@ -10,6 +10,7 @@ root.title("Map Test")
 
 root.grid_columnconfigure(0, weight=1)
 
+
 def mapPopup():
     win = tk.Toplevel(root)
     win.title("Choose Location")
@@ -67,11 +68,26 @@ def areaMapPopup():
     markerList = list()
     polygon = map_widget.set_polygon([(0,0),(0,0),(0,0),(0,0)])
 
+    def sortMarkerList(positionList):
+        twoLowest = [positionList[0],positionList[1]]
+        twoHighest = [positionList[2],positionList[3]]
+        for i in range(0,2):
+            for k in range(0,2):
+                if twoLowest[i][1] > twoHighest[k][1]:
+                    temp = twoLowest[i]
+                    twoLowest[i] = twoHighest[k]
+                    twoHighest[k] = temp
+        if twoHighest[0][0] > twoHighest[1][0]:
+            twoHighest = [twoHighest[1],twoHighest[0]]
+        if twoLowest[0][0] > twoLowest[1][0]:
+            twoLowest = [twoLowest[1],twoLowest[0]]
+        return [twoHighest[0],twoHighest[1],twoLowest[1],twoLowest[0]]
+
     def left_click_event(coordinates_tuple):
+        nonlocal polygon
         newMarker = map_widget.set_marker(coordinates_tuple[0],coordinates_tuple[1])
         if len(markerList) < 4:
             markerList.append(newMarker)
-            newMarker
         else:
             markerList.pop(0).delete()
             markerList.append(newMarker)
@@ -79,7 +95,9 @@ def areaMapPopup():
         if len(markerList) == 4:
             if polygon != None:
                 polygon.delete()
-            polygon = map_widget.set_polygon([marker.position for marker in markerList],
+            positionList = [marker.position for marker in markerList]
+            positionList = sortMarkerList(positionList)
+            polygon = map_widget.set_polygon(positionList,
                                    # fill_color=None,
                                    # outline_color="red",
                                    # border_width=12,
