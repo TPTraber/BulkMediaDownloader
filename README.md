@@ -1,6 +1,6 @@
 # BulkMediaDownloader
 
-A simple wrapper for sk-zk's [streetlevel](https://github.com/sk-zk/streetlevel) package, providing a front and and simple CSV parsing.
+A simple wrapper for sk-zk's [streetlevel](https://github.com/sk-zk/streetlevel) package, providing a front end and simple CSV parsing.
 
 ## Getting Started
 
@@ -21,7 +21,7 @@ pip install pyinstaller
 ```
 * Package into .EXE with pyinstaller
 ```
-pyinstaller --onefile AppV2.py
+pyinstaller --windowed --onefile AppV2.py
 ```
 
 
