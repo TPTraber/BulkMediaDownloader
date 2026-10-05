@@ -43,6 +43,7 @@ streetlevel==0.12.11
 sv_ttk==2.6.1
 sympy==1.14.0
 tk==0.1.0
+truststore==0.10.4
 typing_extensions==4.16.0
 urllib3==2.8.0
 yarl==1.25.1
