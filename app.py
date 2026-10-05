@@ -7,6 +7,10 @@ from BulkMediaDownload import BulkMediaDownloader as BMD
 import sv_ttk
 import darkdetect
 
+import truststore
+
+truststore.inject_into_ssl()
+
 
 def updateLabel(label, text):
     label._text = text
@@ -63,7 +67,7 @@ def completePopup(errors):
     closeButton.grid(row = curRow, column=0, pady=20,padx=20)
 
     
-class UploadFrame(ttk.Frame): 
+class PathSelectFrame(ttk.Frame): 
     def __init__(self, master, type):
         super().__init__(master)
 
@@ -120,10 +124,10 @@ bulkDownloadFrame = ttk.Frame(app, borderwidth=1, relief="solid")
 bulkDownloadFrame.grid(column=0, row=1, sticky="we", padx=20,pady=10)
 
 
-CSVFrame = UploadFrame(bulkDownloadFrame, "CSV")
+CSVFrame = PathSelectFrame(bulkDownloadFrame, "CSV")
 CSVFrame.grid(column=0, row=1, sticky="we",padx=10, pady=5)
 
-FolderFrame = UploadFrame(bulkDownloadFrame, "folder")
+FolderFrame = PathSelectFrame(bulkDownloadFrame, "folder")
 FolderFrame.grid(column=0, row=2, sticky="we", pady=20,padx=10)
 
 bulkDownloadFrame.grid_columnconfigure(0, weight=1,)
