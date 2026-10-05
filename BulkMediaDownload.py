@@ -3,7 +3,6 @@ import csv
 import requests
 import time
 
-
 class BulkMediaDownloader(): 
 
     @staticmethod
