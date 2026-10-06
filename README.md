@@ -49,6 +49,9 @@ xiv2.__file__))')/lib/libexiv2.dylib:pyexiv2/lib"   AppV2.py
 
 ## Version History
 
+* 1.2
+  * Added truststore for Mac Keychain SSL Authentication.
+  * See [release history](https://github.com/TPTraber/BulkMediaDownloader/releases)
 * 1.1
   * Updated streetlevel for Google API Change
   * See [release history](https://github.com/TPTraber/BulkMediaDownloader/releases)
