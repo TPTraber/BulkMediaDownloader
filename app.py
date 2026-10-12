@@ -35,21 +35,6 @@ class FileSelectButton(ttk.Button):
 
         super().__init__(master, command=ChoosePath, text=text)
 
-def infoPopup():
-    win = tk.Toplevel()
-    win.title("Info Panel")
-    win.minsize(width=200, height=300)
-    win.grid_columnconfigure(0, weight=1)
-
-    title = ttk.Label(win, text="App Info:", font=("Arial", 14, "bold"))
-    title.grid(row=0, column=0,padx=30,pady=20)
-
-    label = ttk.Label(win, text="Version: " + version)
-    label.grid(row=1,column=0, pady=10)
-
-    repoBtn = ttk.Button(win, text="Github Repo", command=lambda: webbrowser.open("https://github.com/TPTraber/BulkMediaDownloader"))
-    repoBtn.grid(row=2, column=0)
-
 def completePopup(errors):
 
     #Test Errors
@@ -88,7 +73,6 @@ def completePopup(errors):
 
     closeButton = ttk.Button(win, text="Great!", command=win.destroy)
     closeButton.grid(row = curRow, column=0, pady=20,padx=20)
-
     
 class PathSelectFrame(ttk.Frame): 
     def __init__(self, master, type):
@@ -113,6 +97,9 @@ class PathSelectFrame(ttk.Frame):
         elif (type.lower() == "folder"):
             subtitle = ttk.Label(upperFrame, text="Select Ouput Folder:")
             chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
+        elif (type.lower() == "url"):
+                    subtitle = ttk.Label(upperFrame, text="Pano")
+                    chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
         else:
             subtitle = ttk.Label(upperFrame, text="Select File:")
             chooseButton  = FileSelectButton(upperFrame, self.path, "file", text="Choose File")
@@ -122,6 +109,7 @@ class PathSelectFrame(ttk.Frame):
         
     def getPath(self):
         return self.path.get()
+
 root = tk.Tk()
 
 root.minsize(width=400, height=600)
@@ -136,59 +124,98 @@ app.grid(row=0,column=0, sticky="nsew")
 
 # Set the initial theme
 
-print(darkdetect.theme())
-
 sv_ttk.set_theme(darkdetect.theme())
 
-titleFrame = ttk.Frame(app)
-titleFrame.grid(column=0,row=0,sticky="we")
 app.grid_columnconfigure(0, weight=1)
 
-title = ttk.Label(titleFrame, text="BulkMediaDownloader", font=("Arial", 16, "bold"))
-title.grid(row=0,column=0, sticky="w", padx=20,pady=10)
-titleFrame.grid_columnconfigure(0, weight=1)
+title = ttk.Label(app, text="BulkMediaDownloader", font=("Arial", 16, "bold"))
+title.grid(row=0,column=0, sticky="we", padx=20,pady=10)
+app.grid_columnconfigure(0, weight=1)
 
-if(darkdetect.theme() == "Dark"):
-    infoImgSrc ="resources/info_white.png"
-else:
-    infoImgSrc = "resources/info_black.png"
-infoImg = tk.PhotoImage(file=infoImgSrc).subsample(13,13)
+notebook = ttk.Notebook(app,)
+notebook.grid(column=0, row=1, sticky="we", padx=20,pady=10)
 
-infoBtn = ttk.Button(titleFrame, image=infoImg, command=infoPopup)
-infoBtn.grid(column=1,row=0,sticky="e")
+## BULK DOWNLOAD FRAME SETUP
 
+bulkDownloadFrame = ttk.Frame(notebook, borderwidth=1, relief="solid")
+bulkDownloadFrame.grid(column=0, row=0, sticky="nswe")
 
-bulkDownloadFrame = ttk.Frame(app, borderwidth=1, relief="solid")
-bulkDownloadFrame.grid(column=0, row=1, sticky="we", padx=20,pady=10)
-
+notebook.add(bulkDownloadFrame, text="CSV BulkDownload")
 
 CSVFrame = PathSelectFrame(bulkDownloadFrame, "CSV")
-CSVFrame.grid(column=0, row=1, sticky="we",padx=10, pady=5)
+CSVFrame.grid(column=0, row=0, sticky="we",padx=10, pady=5)
 
 FolderFrame = PathSelectFrame(bulkDownloadFrame, "folder")
-FolderFrame.grid(column=0, row=2, sticky="we", pady=20,padx=10)
+FolderFrame.grid(column=0, row=1, sticky="we", pady=20,padx=10)
 
 bulkDownloadFrame.grid_columnconfigure(0, weight=1,)
-
 
 CSVFrame.grid_columnconfigure(0, weight=1)
 FolderFrame.grid_columnconfigure(0, weight=1)
 
-progressBar = ttk.Progressbar(app, value=0, maximum=100, mode='determinate', length=150)
-progressBar.grid(row=4, column=0, pady=20, sticky="n")
+progressBar = ttk.Progressbar(bulkDownloadFrame, value=0, maximum=100, mode='determinate', length=150)
+progressBar.grid(row=3, column=0, pady=20, sticky="n")
 
-progressLabel = ttk.Label(app, text="")
-progressLabel.grid(row=5, column=0)
+progressLabel = ttk.Label(bulkDownloadFrame, text="")
+progressLabel.grid(row=4, column=0)
 
-def requestBulkDownload():
+def requestBulkCSVDownload():
     errors = BMD.BulkMediaDownload(FolderFrame.getPath(), CSVPath=CSVFrame.getPath(), ProgressLabel=progressLabel, ProgressBar=progressBar, Root=root, WaitTime=0.1)
     print(errors)
     completePopup(errors)
 
-downloadBttn = ttk.Button(app, text="Download", command=requestBulkDownload)
-downloadBttn.grid(row=3,column=0)
+downloadBttn = ttk.Button(bulkDownloadFrame, text="Download", command=requestBulkCSVDownload)
+downloadBttn.grid(row=2,column=0)
 
-#testBttn = ttk.Button(app, text="test popup", command=completePopup)
-#testBttn.grid(row=5, column=0)
+# ## SINGLE DOWNLOAD FRAME SETUP
+
+URLDownloadFrame = ttk.Frame(notebook, borderwidth=1, relief="solid")
+URLDownloadFrame.grid(column=0, row=0, sticky="nswe")
+
+notebook.add(URLDownloadFrame, text="URL")
+
+urlFrame = PathSelectFrame(URLDownloadFrame, "url")
+urlFrame.grid(column=0, row=0, sticky="we",padx=10, pady=5)
+
+FolderFrameURL = PathSelectFrame(URLDownloadFrame, "folder")
+FolderFrameURL.grid(column=0, row=1, sticky="we", pady=20,padx=10)
+
+
+URLDownloadFrame.grid_columnconfigure(0, weight=1,)
+
+urlFrame.grid_columnconfigure(0, weight=1)
+FolderFrameURL.grid_columnconfigure(0, weight=1)
+
+progressBarURL = ttk.Progressbar(URLDownloadFrame, value=0, maximum=100, mode='determinate', length=150)
+progressBarURL.grid(row=3, column=0, pady=20, sticky="n")
+
+progressLabelURL = ttk.Label(URLDownloadFrame, text="")
+progressLabelURL.grid(row=4, column=0)
+
+def requestURLCSVDownload():
+    errors = BMD.BulkMediaDownload(FolderFrame.getPath(), urlList=CSVFrame.getPath(), ProgressLabel=progressLabel, ProgressBar=progressBar, Root=root, WaitTime=0.1)
+    print(errors)
+    completePopup(errors)
+
+downloadBttnURL = ttk.Button(URLDownloadFrame, text="Download", command=requestURLDownload)
+downloadBttnURL.grid(row=2,column=0)
+
+
+## INFO FRAME SETUP
+infoFrame = ttk.Frame(notebook, padding=20, borderwidth=1, relief="solid")
+infoFrame.grid_columnconfigure(0, weight=1)
+
+infoTitle = ttk.Label(infoFrame, text="App Info:", font=("Arial", 14, "bold"))
+infoTitle.grid(row=0, column=0, sticky="w")
+
+verLabel = ttk.Label(infoFrame, text="Version: " + version)
+verLabel.grid(row=1,column=0, pady=10, sticky="w")
+
+repoBtn = ttk.Button(infoFrame, text="Github Repo", command=lambda: webbrowser.open("https://github.com/TPTraber/BulkMediaDownloader"))
+repoBtn.grid(row=2, column=0, sticky="w")
+
+notebook.add(infoFrame, text="Info")
+
+
 
 app.mainloop()

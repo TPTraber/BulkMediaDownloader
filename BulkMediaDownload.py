@@ -56,7 +56,7 @@ class BulkMediaDownloader():
 
 
     @staticmethod
-    def BulkMediaDownload(outputPath:str, CSVPath:str=None, urlList:list=None , ProgressLabel=None, ProgressBar=None, Root=None, WaitTime:float=None):
+    def BulkMediaDownload(outputPath:str, CSVPath:str=None, urlList:str=None , ProgressLabel=None, ProgressBar=None, Root=None, WaitTime:float=None):
 
         if CSVPath == None and urlList == None:
             raise Exception("No url input")
@@ -96,8 +96,11 @@ class BulkMediaDownloader():
                     if (WaitTime != None): time.sleep(WaitTime)
         elif urlList != None:
                 count = 0
+                urlList = urlList.split(",")
                 for url in urlList:
                     try:
+                        BulkMediaDownloader.__URLHandler(url, outputPath, name, count=name_count)
+
                         if url.__contains__("maps"):
                             BulkMediaDownloader.PanoDownload(url, outputPath + f"/{name}_{count}")
                         elif url.__contains__(".jpg") or url.__contains__(".png"):
@@ -116,5 +119,3 @@ class BulkMediaDownloader():
                     if (WaitTime != None): time.sleep(WaitTime)
 
         return errors
-        
-    
