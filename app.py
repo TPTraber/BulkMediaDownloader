@@ -98,14 +98,15 @@ class PathSelectFrame(ttk.Frame):
             subtitle = ttk.Label(upperFrame, text="Select Ouput Folder:")
             chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
         elif (type.lower() == "url"):
-                    subtitle = ttk.Label(upperFrame, text="Pano")
+                    subtitle = ttk.Label(upperFrame, text="URL List:")
                     chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
         else:
             subtitle = ttk.Label(upperFrame, text="Select File:")
             chooseButton  = FileSelectButton(upperFrame, self.path, "file", text="Choose File")
             
         subtitle.grid(column=0, row=0, sticky="w")
-        chooseButton.grid(column=1, row=0, padx=(5,0))
+        if(type.lower() !="url"):
+            chooseButton.grid(column=1, row=0, padx=(5,0))
         
     def getPath(self):
         return self.path.get()
@@ -192,8 +193,8 @@ progressBarURL.grid(row=3, column=0, pady=20, sticky="n")
 progressLabelURL = ttk.Label(URLDownloadFrame, text="")
 progressLabelURL.grid(row=4, column=0)
 
-def requestURLCSVDownload():
-    errors = BMD.BulkMediaDownload(FolderFrame.getPath(), urlList=CSVFrame.getPath(), ProgressLabel=progressLabel, ProgressBar=progressBar, Root=root, WaitTime=0.1)
+def requestURLDownload():
+    errors = BMD.BulkMediaDownload(FolderFrameURL.getPath(), urlList=urlFrame.getPath(), ProgressLabel=progressLabelURL, ProgressBar=progressBarURL, Root=root, WaitTime=0.1)
     print(errors)
     completePopup(errors)
 

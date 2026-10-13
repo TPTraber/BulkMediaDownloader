@@ -59,7 +59,9 @@ class BulkMediaDownloader():
     def BulkMediaDownload(outputPath:str, CSVPath:str=None, urlList:str=None , ProgressLabel=None, ProgressBar=None, Root=None, WaitTime:float=None):
 
         if CSVPath == None and urlList == None:
-            raise Exception("No url input")
+            raise Exception("No input")
+
+        errors = []
 
         if CSVPath != None:
             with open(CSVPath, 'r', newline='') as file:
@@ -68,7 +70,7 @@ class BulkMediaDownloader():
 
             with open(CSVPath, 'r', newline='') as file:
                 csv_reader = csv.reader(file)
-                errors = []
+                
 
                 val = 0
                 
@@ -96,26 +98,22 @@ class BulkMediaDownloader():
                     if (WaitTime != None): time.sleep(WaitTime)
         elif urlList != None:
                 count = 0
-                urlList = urlList.split(",")
+                urlList = urlList.split(";")
+                errors = []
                 for url in urlList:
                     try:
-                        BulkMediaDownloader.__URLHandler(url, outputPath, name, count=name_count)
-
-                        if url.__contains__("maps"):
-                            BulkMediaDownloader.PanoDownload(url, outputPath + f"/{name}_{count}")
-                        elif url.__contains__(".jpg") or url.__contains__(".png"):
-                            BulkMediaDownloader.DownloadImage(url, outputPath + f"/{name}_{count}")
+                        BulkMediaDownloader.__URLHandler(url, outputPath, "BMD", count=count)
 
                     except Exception as e:
                         # A general exception handler for any other unexpected errors
                         print(f"An unexpected error occurred: {e}")
                         errors.append(f"{name}_{count}")
                     count += 1
-                    val += 1
 
                     #If tkinter elements present, update them
-                    if (ProgressBar != None): ProgressBar.config(value=val)
+                    if (ProgressBar != None): ProgressBar.config(value=count)
                     if(Root != None): Root.update_idletasks()
                     if (WaitTime != None): time.sleep(WaitTime)
+
 
         return errors
