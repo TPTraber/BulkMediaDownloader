@@ -18,7 +18,7 @@ import sv_ttk
 import darkdetect
 import webbrowser
 
-version = "v1.0.4"
+version = "v1.1.0"
 
 def updateLabel(label, text):
     label._text = text
@@ -36,12 +36,6 @@ class FileSelectButton(ttk.Button):
         super().__init__(master, command=ChoosePath, text=text)
 
 def completePopup(errors):
-
-    #Test Errors
-    #errors = ["test1", "blahblah", "really really bad error"]
-    #for i in range(0,20):
-            #errors.append(i)
-
     win = tk.Toplevel()
     win.title("Download Complete")
     win.grid_columnconfigure(0, weight=1)
@@ -192,7 +186,6 @@ urlFrame.grid(column=0, row=0, sticky="we",padx=10, pady=5)
 
 FolderFrameURL = PathSelectFrame(URLDownloadFrame, "folder")
 FolderFrameURL.grid(column=0, row=1, sticky="we", pady=20,padx=10)
-
 
 URLDownloadFrame.grid_columnconfigure(0, weight=1,)
 
