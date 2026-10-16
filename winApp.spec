@@ -5,7 +5,9 @@ a = Analysis(
     ['app.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[
+        ('resources', 'resources')
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -22,7 +24,8 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='app',
+    name='BulkMediaDownloader',
+    icon='resources\BulkDownloaderIcon.png',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
