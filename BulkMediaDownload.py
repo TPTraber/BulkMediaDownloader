@@ -98,11 +98,12 @@ class BulkMediaDownloader():
                     if (WaitTime != None): time.sleep(WaitTime)
         elif urlList != None:
                 count = 0
+                name = "BMDownload"
                 urlList = urlList.split(";")
                 errors = []
                 for url in urlList:
                     try:
-                        BulkMediaDownloader.__URLHandler(url, outputPath, "BMD", count=count)
+                        BulkMediaDownloader.__URLHandler(url, outputPath, name, count=count)
 
                     except Exception as e:
                         # A general exception handler for any other unexpected errors
