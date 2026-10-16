@@ -1,5 +1,5 @@
 # very first lines of the app, before any other imports
-import os, certifi
+import os, sys, certifi
 
 try:
     import truststore
@@ -98,8 +98,8 @@ class PathSelectFrame(ttk.Frame):
             subtitle = ttk.Label(upperFrame, text="Select Ouput Folder:")
             chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
         elif (type.lower() == "url"):
-                    subtitle = ttk.Label(upperFrame, text="URL List:")
-                    chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
+            subtitle = ttk.Label(upperFrame, text="URL List:")
+            chooseButton  = FileSelectButton(upperFrame, self.path, "folder", text="Choose Folder")
         else:
             subtitle = ttk.Label(upperFrame, text="Select File:")
             chooseButton  = FileSelectButton(upperFrame, self.path, "file", text="Choose File")
@@ -116,6 +116,18 @@ root = tk.Tk()
 root.minsize(width=400, height=600)
 
 root.title("BulkMediaDownloader")
+
+def get_relative_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+image_path = get_relative_path("resources/BulkDownloaderIcon.png")
+app_icon = tk.PhotoImage(file=image_path)
+root.iconphoto(True, app_icon)
 
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)
